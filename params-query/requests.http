@@ -1,0 +1,7 @@
+###
+GET http://localhost:7000/user/search?q=node&b=123
+
+###
+GET http://localhost:7000/users/max
+
+###
