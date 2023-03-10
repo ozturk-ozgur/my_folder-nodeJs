@@ -29,7 +29,6 @@ const login = async (req, res, next) => {
     }
     const user = await User.findOne({ username });
     const comparePassword = await user.comparePassword(password, user.password);
-    console.log("password : ", comparePassword);
     if (!comparePassword) {
       return res
         .status(400)
@@ -45,9 +44,7 @@ const login = async (req, res, next) => {
       secure: true,
       sameSite: "Lax",
     });
-    res
-      .status(200)
-      .json({ message: "you are logged in", username: user.username, token });
+    res.status(200).json({ message: "you are logged in", user, token });
   } catch (error) {
     // res.status(500).json({ message: "server error" });
     next(error);
@@ -55,10 +52,9 @@ const login = async (req, res, next) => {
   }
 };
 
-const getUsers = async (req, res, next) => {
+const admin = async (req, res, next) => {
   try {
     const users = await User.find();
-
     res.status(200).json({ users });
   } catch (error) {
     // res.status(500).json({ message: "server error" });
@@ -67,17 +63,28 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-// nicht fertig!
-const admin = async (req, res, next) => {
-    try {
-      const users = await User.find();
-  
-      res.status(200).json({ users });
-    } catch (error) {
-      // res.status(500).json({ message: "server error" });
-      next(error);
-      console.log(error);
-    }
-  };
+const loadUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select(
+      "-password -_id -__v"
+    );
+    console.log("loading the user:", user);
+    return res.json({ user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
 
-module.exports = { register, login, getUsers ,admin};
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ msg: "logged out successfully!" });
+  } catch (error) {
+    // res.status(500).json({ message: "server error" });
+    next(error);
+    console.log(error);
+  }
+};
+
+module.exports = { register, login, admin, logout, loadUser };

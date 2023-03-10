@@ -5,18 +5,18 @@ const jwt = require("jsonwebtoken");
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    // required: true,
-    // minlength: 4,
+    required: true,
+    minlength: 4,
   },
   password: {
     type: String,
-    // required: true,
-    // minlength: 5,
+    required: true,
+    minlength: 5,
   },
   fullname: {
     type: String,
-    // required: true,
-    // minlength: 5,
+    required: true,
+    minlength: 5,
   },
   role: {
     type: String,
@@ -52,3 +52,5 @@ UserSchema.pre("save", async function (next) {
 });
 
 module.exports = mongoose.model("User", UserSchema);
+
+
