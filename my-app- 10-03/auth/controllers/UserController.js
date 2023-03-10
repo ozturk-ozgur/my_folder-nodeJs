@@ -37,7 +37,7 @@ const login = async (req, res, next) => {
     const payload = { userId: user._id, username: user.username };
     const secretKey = process.env.SECRET_KEY;
     const token = await user.createToken(payload, secretKey);
-    console.log("test")
+    console.log("test");
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
@@ -67,9 +67,8 @@ const admin = async (req, res, next) => {
       return res
         .status(400)
         .json({ message: "username or password incorrect!" });
-    } 
-    
-    console.log("admin:","test")
+    }
+
     const payload = { userId: user._id, username: user.username };
     const secretKey = process.env.SECRET_KEY;
     const token = await user.createToken(payload, secretKey);
@@ -81,7 +80,6 @@ const admin = async (req, res, next) => {
       sameSite: "Lax",
     });
 
-   console.log(user.role)
     if (user.role == "user") {
       return res.status(403).json({ message: "you are not allowed!" });
     }
