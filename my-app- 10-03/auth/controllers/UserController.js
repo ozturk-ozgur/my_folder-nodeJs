@@ -37,7 +37,7 @@ const login = async (req, res, next) => {
     const payload = { userId: user._id, username: user.username };
     const secretKey = process.env.SECRET_KEY;
     const token = await user.createToken(payload, secretKey);
-
+    console.log("test")
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
@@ -54,8 +54,40 @@ const login = async (req, res, next) => {
 
 const admin = async (req, res, next) => {
   try {
+    const { username, password } = req.body;
+    const userExists = await User.findOne({ username });
+    if (!userExists) {
+      // wenn man cookies nicht löscht, dann darf man ohne token auf protected pages zugreifen!
+      res.clearCookie("token");
+      return res.status(400).json({ message: "User not exists!" });
+    }
+    const user = await User.findOne({ username });
+    const comparePassword = await user.comparePassword(password, user.password);
+    if (!comparePassword) {
+      return res
+        .status(400)
+        .json({ message: "username or password incorrect!" });
+    } 
+    
+    console.log("admin:","test")
+    const payload = { userId: user._id, username: user.username };
+    const secretKey = process.env.SECRET_KEY;
+    const token = await user.createToken(payload, secretKey);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
+      sameSite: "Lax",
+    });
+
+   console.log(user.role)
+    if (user.role == "user") {
+      return res.status(403).json({ message: "you are not allowed!" });
+    }
+
     const users = await User.find();
-    res.status(200).json({ users });
+    return res.status(200).json({ user, users, token });
   } catch (error) {
     // res.status(500).json({ message: "server error" });
     next(error);

@@ -11,7 +11,7 @@ const authenticate = require("../middleware/authenticate");
 const isAdmin = require("../middleware/isAdmin");
 const { userValidation, validate } = require("../middleware/userValidation");
 
-router.get("/admin", authenticate, isAdmin, admin);
+router.post("/admin",admin);
 router.get("/auth", authenticate, loadUser);
 
 router.post("/register", userValidation(), validate, register);

@@ -1,27 +1,29 @@
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import { Navigate } from 'react-router-dom';
-
+import { Navigate } from "react-router-dom";
 
 function Login() {
-  const { state, login } = useContext(AuthContext);
+  const { state, login,isAdmin } = useContext(AuthContext);
 
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
 
-  const submitForm = async (e) => {
+  const submitUserForm = async (e) => {
     e.preventDefault();
     login(user);
   };
 
- 
+  const submitAdminForm = async (e) => {
+    e.preventDefault();
+    isAdmin(user)
+  };
 
-  if (state.isAuth) return <Navigate to='/dashboard' />;
+  if (state.isAuth) return <Navigate to="/dashboard" />;
 
   return (
-    <form className="App-header" onSubmit={submitForm}>
+    <form className="App-header" >
       <h2>Login Form</h2>
       <input
         type="text"
@@ -37,7 +39,9 @@ function Login() {
         onChange={(e) => setUser({ ...user, password: e.target.value })}
         required={true}
       />
-      <button type="submit">login</button>
+      <button type="submit" onClick={submitUserForm}>login user</button>
+      <button type="submit" onClick={submitAdminForm}>login admin</button>
+
     </form>
   );
 }
