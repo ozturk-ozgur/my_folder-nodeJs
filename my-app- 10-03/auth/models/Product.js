@@ -8,12 +8,9 @@ const ProductSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: true,
-   
   },
   isStok: {
     type: Boolean,
-    required:true,
   },
   inStock: {
     type: Number,
@@ -21,8 +18,7 @@ const ProductSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: new Date(),
-  }
+  },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
-

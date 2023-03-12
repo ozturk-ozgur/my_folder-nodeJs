@@ -7,10 +7,12 @@ const addProduct = async (req, res) => {
     await newProduct.save();
     res
       .status(201)
-      .json({ message: "new product saved successfully" }, newProduct);
+      .json({ message: "new product saved successfully" ,newProduct});
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "server error" });
   }
 };
 
 module.exports = { addProduct };
+
