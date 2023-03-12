@@ -27,6 +27,12 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
 });
 
 // UserSchema.methods.hashPassword = async function (password) {
@@ -52,5 +58,3 @@ UserSchema.pre("save", async function (next) {
 });
 
 module.exports = mongoose.model("User", UserSchema);
-
-

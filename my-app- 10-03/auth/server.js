@@ -6,11 +6,16 @@ dotenv.config();
 const connect = require("./connection");
 const cookieParser = require("cookie-parser");
 const UserRoutes = require("./routes/UserRoutes");
+const ProductRoutes = require("./routes/ProductRoutes");
+const OrderRoutes = require("./routes/OrderRoutes");
+
 app.use(cors());
 
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1", UserRoutes);
+app.use("/api/v1", ProductRoutes);
+app.use("/api/v1", OrderRoutes);
 
 const URI = process.env.MONGO_URI;
 
@@ -27,5 +32,3 @@ const start = async () => {
 };
 
 start();
-
-
